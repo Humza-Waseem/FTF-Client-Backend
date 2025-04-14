@@ -311,7 +311,9 @@ API_CONFIGS = {
     
     
 STATICSTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # DEPLOYMENT PURPOSES
-CSRF_TRUSTED_ORIGINS= [ "https://web-production-40c0.up.railway.app/","https://web-production-76282.up.railway.app/" ] # DEPLOYMENT PURPOSES
+CSRF_TRUSTED_ORIGINS= [ "https://web-production-40c0.up.railway.app/","https://web-production-76282.up.railway.app/", "web-production-40c0.up.railway.app",  
+    "localhost",                         
+    "127.0.0.1" ] # DEPLOYMENT PURPOSES
 
 
 AUTH_PASSWORD_VALIDATORS = [
