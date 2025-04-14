@@ -9,7 +9,7 @@ load_dotenv(dotenv_path=Path('.env'))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [ 'web-production-40c0.up.railway.app',  # Your Railway domain
     'localhost',                          # For local testing

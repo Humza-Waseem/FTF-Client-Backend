@@ -1,0 +1,18 @@
+{
+    "build": {
+      "nixpacksPlan": {
+        "phases": {
+          "build": {
+            "commands": [
+              "python manage.py collectstatic --noinput"
+            ]
+          },
+          "release": {
+            "commands": [
+              "python manage.py migrate"
+            ]
+          }
+        }
+      }
+    }
+  }

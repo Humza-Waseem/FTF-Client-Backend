@@ -1,4 +1,2 @@
-#web: gunicorn config.wsgi --log-file - 
-#or works good with external database
-web: python manage.py migrate && gunicorn config.wsgi
-web: gunicorn config.wsgi
+release: python manage.py migrate
+web: gunicorn config.wsgi:application --workers=2 --threads=4 --timeout 120 --max-requests 1000 --max-requests-jitter 50 --bind 0.0.0.0:$PORT
