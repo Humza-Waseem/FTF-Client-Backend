@@ -10,7 +10,7 @@ load_dotenv(dotenv_path=Path('.env'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [".verce.app", "web-production-40c0.up.railway.app","web-production-76282.up.railway.app/" ]
+ALLOWED_HOSTS = [ "https://web-production-40c0.up.railway.app/","https://web-production-76282.up.railway.app/" ]
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

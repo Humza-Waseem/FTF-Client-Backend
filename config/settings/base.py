@@ -283,16 +283,35 @@ API_CONFIGS = {
         'ACCOUNT': os.getenv('INBODY_ACCOUNT'),
         'BASE_URL': 'https://api.inbody.com'  # Example URL
     }
+    
 }
+
+# print(API_CONFIGS['NUTRITIONIX']['APP_ID'])
+# print(API_CONFIGS['NUTRITIONIX']['APP_KEY'])
+# print(API_CONFIGS['MINDBODY']['API_KEY'])
+# print(API_CONFIGS['MINDBODY']['SITE_ID'])
+# print(API_CONFIGS['MINDBODY']['BASE_URL'])
+# print(API_CONFIGS['INBODY']['API_KEY'])
+# print(API_CONFIGS['INBODY']['ACCOUNT'])
+
+
+
+
+        
+
+
+
+# Example usage:
+
 # Validation
-for service, config in API_CONFIGS.items():
-    if not all(config.values()):
-        raise ValueError(f"Missing configuration for {service} API")
+# for service, config in API_CONFIGS.items():
+#     if not all(config.values()):
+#         raise ValueError(f"Missing configuration for {service} API")
     
     
     
 STATICSTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # DEPLOYMENT PURPOSES
-CSRF_TRUSTED_ORIGINS= [ "web-production-40c0.up.railway.app",".vercel.app" ] # DEPLOYMENT PURPOSES
+CSRF_TRUSTED_ORIGINS= [ "https://web-production-40c0.up.railway.app/","https://web-production-76282.up.railway.app/" ] # DEPLOYMENT PURPOSES
 
 
 AUTH_PASSWORD_VALIDATORS = [
