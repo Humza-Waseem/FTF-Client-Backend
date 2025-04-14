@@ -10,8 +10,9 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 from django.core.wsgi import get_wsgi_application
 
 from config.setup_environment import setup_environment
-
+import os
 setup_environment()
 
 application = get_wsgi_application()
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')  # Must match!
 app = application

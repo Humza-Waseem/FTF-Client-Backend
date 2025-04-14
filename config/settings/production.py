@@ -1,6 +1,6 @@
 from config.settings.base import *
 import os
-
+from .base import *
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -29,3 +29,5 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
 }
+
+DEBUG = False

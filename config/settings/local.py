@@ -2,6 +2,7 @@ from config.settings.base import *
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+from .base import *
 
 # Load .env
 load_dotenv(dotenv_path=Path('.env'))
