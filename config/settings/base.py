@@ -18,7 +18,7 @@ environ.Env.read_env(BASE_DIR.__str__() + '/.env')
 
 env = environ.Env()
 environ.Env.read_env() 
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 
 # Application definition
