@@ -292,7 +292,7 @@ for service, config in API_CONFIGS.items():
     
     
 STATICSTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # DEPLOYMENT PURPOSES
-# CSRF_TRUSTED_ORIGINS= ["*"]
+CSRF_TRUSTED_ORIGINS= [ "web-production-40c0.up.railway.app",".vercel.app" ] # DEPLOYMENT PURPOSES
 
 
 AUTH_PASSWORD_VALIDATORS = [
