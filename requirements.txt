@@ -1,0 +1,18 @@
+asgiref
+Django
+django-environ==0.9.0
+sqlparse==0.4.2
+djangorestframework
+djangorestframework-simplejwt
+python-dotenv
+requests
+Pillow
+django-rest-passwordreset
+sendgrid
+django-allauth
+cryptography
+pyotp
+psycopg2
+gunicorn # for deployment purposes
+whitenoise
+django-password-validators
