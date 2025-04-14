@@ -16,4 +16,3 @@ psycopg2
 gunicorn # for deployment purposes
 whitenoise
 django-password-validators
-python
