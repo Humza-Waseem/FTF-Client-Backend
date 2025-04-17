@@ -9,6 +9,6 @@ def test_email():
 
     try:
         send_mail(subject, message, email_from, recipient_list)
-        print("Email sent successfully!")
+        print("Email sent successfully")
     except Exception as e:
         print(f"Error sending email: {e}")

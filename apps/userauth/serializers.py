@@ -183,12 +183,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
-
-
-
-
-
-        
 #The User Login Serializer
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     email = serializers.EmailField(write_only=True)
@@ -232,6 +226,30 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
 
         return token
+    
+    
+############################  PASSWORD RESET  ###############################   
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    first_name = serializers.CharField(required=True, max_length=50)
+    last_name = serializers.CharField(required=True, max_length=50)
+    
+    def validate_email(self, value):
+        # Check if the email exists in the system
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("No user found with this email address.")
+        return value
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 ##################   OTP SERIALIZERS  #####################
@@ -317,57 +335,57 @@ class OTPVerificationSerializer(serializers.Serializer):
         
         
 ###### PASSWORD RESET LOGIC
-class PasswordResetRequestSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+# class PasswordResetRequestSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
 
-    def validate_email(self, value):
-        # Check if the email exists in the system
-        users = User.objects.filter(email=value)
-        if not users.exists():
-            raise serializers.ValidationError("No user found with this email address.")
-        return value
-class PasswordResetConfirmSerializer(serializers.Serializer):
-    uidb64 = serializers.CharField()
-    token = serializers.CharField()
-    new_password = serializers.CharField(
-        write_only=True,
-        style={'input_type': 'password'},
-        min_length=8
-    )
-    confirm_password = serializers.CharField(
-        write_only=True,
-        style={'input_type': 'password'}
-    )
+#     def validate_email(self, value):
+#         # Check if the email exists in the system
+#         users = User.objects.filter(email=value)
+#         if not users.exists():
+#             raise serializers.ValidationError("No user found with this email address.")
+#         return value
+# class PasswordResetConfirmSerializer(serializers.Serializer):
+#     uidb64 = serializers.CharField()
+#     token = serializers.CharField()
+#     new_password = serializers.CharField(
+#         write_only=True,
+#         style={'input_type': 'password'},
+#         min_length=8
+#     )
+#     confirm_password = serializers.CharField(
+#         write_only=True,
+#         style={'input_type': 'password'}
+#     )
 
-    def validate(self, data):
-        # Validate passwords match
-        if data['new_password'] != data['confirm_password']:
-            raise serializers.ValidationError({
-                "confirm_password": "Passwords do not match."
-            })
+#     def validate(self, data):
+#         # Validate passwords match
+#         if data['new_password'] != data['confirm_password']:
+#             raise serializers.ValidationError({
+#                 "confirm_password": "Passwords do not match."
+#             })
 
-        # Decode the UID and get the user
-        try:
-            uid = force_str(urlsafe_base64_decode(data['uidb64']))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            raise ValidationError("Invalid user identifier.")
+#         # Decode the UID and get the user
+#         try:
+#             uid = force_str(urlsafe_base64_decode(data['uidb64']))
+#             user = User.objects.get(pk=uid)
+#         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+#             raise ValidationError("Invalid user identifier.")
 
-        # Validate the token
-        if not default_token_generator.check_token(user, data['token']):
-            raise ValidationError("Invalid or expired token.")
+#         # Validate the token
+#         if not default_token_generator.check_token(user, data['token']):
+#             raise ValidationError("Invalid or expired token.")
 
-        return data
+#         return data
 
-    def save(self):
-        # Decode the UID and get the user
-        uid = force_str(urlsafe_base64_decode(self.validated_data['uidb64']))
-        user = User.objects.get(pk=uid)
+#     def save(self):
+#         # Decode the UID and get the user
+#         uid = force_str(urlsafe_base64_decode(self.validated_data['uidb64']))
+#         user = User.objects.get(pk=uid)
         
-        # Set the new password
-        user.set_password(self.validated_data['new_password'])
-        user.save()
-        return user
+#         # Set the new password
+#         user.set_password(self.validated_data['new_password'])
+#         user.save()
+#         return user
     
     
 # Password Reset Serializer
@@ -410,3 +428,17 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 #         token = super().get_token(user)
 #         token['user_type'] = user.user_type
 #         return token
+
+
+
+
+
+# Serializer for the OAuth callback
+class OAuthCallbackSerializer(serializers.Serializer):
+    code = serializers.CharField(required=True)
+    state = serializers.CharField(required=False)
+
+# Serializer for password grant
+class PasswordGrantSerializer(serializers.Serializer):
+    username = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True, style={'input_type': 'password'})

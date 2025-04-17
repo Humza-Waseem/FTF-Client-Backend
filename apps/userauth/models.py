@@ -1,6 +1,4 @@
 from django.db import models
-
-# Create your models here.
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django_rest_passwordreset.signals import reset_password_token_created
@@ -16,8 +14,6 @@ class User(AbstractUser):
         ('STAFF', 'Staff'),
         ('CLIENT', 'Client'),
     )
-    
-    # Remove default username field
     username = models.CharField(
         max_length=150, 
         unique=True, 
@@ -59,7 +55,6 @@ class User(AbstractUser):
     PostalCode = models.CharField(max_length=10, blank=True, null=True)
     ReferredBy = models.CharField(max_length=50, blank=True, null=True)
     DateOfBirth = models.DateField(blank=True, null=True)
-    # MobilePhone = models.CharField(max_length=15, blank=True, null=True) 
     IsMale = models.BooleanField(default=False)
     Gender_Types = (
         ('MALE', 'Male'),
@@ -70,7 +65,6 @@ class User(AbstractUser):
     Height = models.FloatField(blank=True, null=True)
     Weight = models.FloatField(blank=True, null=True)
     userRegDate = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    # userRegDate = models.DateField(auto_now_add=True, blank=True, null=True) #IF WE'LL ONLY WANT THE DATE
     Gender = models.CharField(
         max_length=15, 
         choices=Gender_Types, 

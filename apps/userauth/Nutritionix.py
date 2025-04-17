@@ -11,8 +11,7 @@ def get_nutrition(query):
         },
         json={"query": query}
     )
-    response.raise_for_status()  # Raise exception for HTTP errors
+    response.raise_for_status()  
     return response.json()
 
-# Usage
 print(get_nutrition("1 cup oatmeal and 1 banana"))

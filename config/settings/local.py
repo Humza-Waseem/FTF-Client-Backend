@@ -9,11 +9,12 @@ load_dotenv(dotenv_path=Path('.env'))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [ 'web-production-40c0.up.railway.app',  # Your Railway domain
-    'localhost',                          # For local testing
-    '127.0.0.1' ]
+# ALLOWED_HOSTS = [ 'web-production-40c0.up.railway.app',  
+#     'localhost',                         
+#     '127.0.0.1' ]
+ALLOWED_HOSTS = ['*']
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

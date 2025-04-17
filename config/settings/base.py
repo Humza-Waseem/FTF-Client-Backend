@@ -282,7 +282,14 @@ API_CONFIGS = {
         'API_KEY': os.getenv('INBODY_API_KEY'),
         'ACCOUNT': os.getenv('INBODY_ACCOUNT'),
         'BASE_URL': 'https://api.inbody.com'  # Example URL
-    }
+    },
+    'PERKVILLE': {
+        'CLIENT_ID': os.getenv('PERKVILLE_CLIENT_ID'),
+        'CLIENT_SECRET': os.getenv('PERKVILLE_CLIENT_SECRET'),
+        'REDIRECT_URI': 'http://127.0.0.1:8000/userauth/perkville/callback/',
+        # Optional: If you have a custom domain
+        # 'CUSTOM_DOMAIN': 'client-custom-domain.com' 
+    },
     
 }
 
@@ -311,9 +318,9 @@ API_CONFIGS = {
     
     
 STATICSTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # DEPLOYMENT PURPOSES
-CSRF_TRUSTED_ORIGINS= [ "https://web-production-40c0.up.railway.app/","https://web-production-76282.up.railway.app/", "web-production-40c0.up.railway.app",  
-    "localhost",                         
-    "127.0.0.1" ] # DEPLOYMENT PURPOSES
+# CSRF_TRUSTED_ORIGINS= [ "https://web-production-40c0.up.railway.app/","https://web-production-76282.up.railway.app/", "web-production-40c0.up.railway.app",  
+#     "localhost",                         
+#     "127.0.0.1" ] 
 
 
 AUTH_PASSWORD_VALIDATORS = [
