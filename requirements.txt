@@ -16,4 +16,4 @@ psycopg2
 gunicorn # for deployment purposes
 whitenoise
 django-password-validators
-dj-database-url==2.1.0
+dj-database-url
