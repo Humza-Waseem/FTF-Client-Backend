@@ -4,6 +4,7 @@ from .base import *
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+import dj_database_url
 
 # Load .env
 load_dotenv(dotenv_path=Path('.env'))
@@ -29,9 +30,8 @@ DATABASES = {
     #     'HOST': os.environ.get('DB_HOST', 'localhost'),
     #     'PORT': os.environ.get('DB_PORT', '5432'),
     # }
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
-    )
+      'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+   
 }
    # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
