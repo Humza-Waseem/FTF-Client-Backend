@@ -15,4 +15,5 @@ setup_environment()
 
 application = get_wsgi_application()
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')  # Must match!
+
 app = application
