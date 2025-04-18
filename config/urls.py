@@ -22,4 +22,9 @@ urlpatterns = [
     path('userauth/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     # path('api/auth/google/', GoogleLoginView.as_view(), name='google_login'),
     path('accounts/', include('allauth.urls')),
+    path('perkville/callback/', include('apps.userauth.urls')),  # Add this line
+
+    
+    
+    
 ]

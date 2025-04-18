@@ -79,7 +79,8 @@ class User(AbstractUser):
     is_staff_member = models.BooleanField(default=False)  
     
     
-    
+    perkville_access_token = models.CharField(max_length=255, blank=True, null=True)
+
 
 
 

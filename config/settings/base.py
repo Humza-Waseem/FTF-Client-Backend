@@ -286,9 +286,13 @@ API_CONFIGS = {
     'PERKVILLE': {
         'CLIENT_ID': os.getenv('PERKVILLE_CLIENT_ID'),
         'CLIENT_SECRET': os.getenv('PERKVILLE_CLIENT_SECRET'),
-        'REDIRECT_URI': 'http://127.0.0.1:8000/userauth/perkville/callback/',
-        # Optional: If you have a custom domain
-        # 'CUSTOM_DOMAIN': 'client-custom-domain.com' 
+        'REDIRECT_URI': os.getenv('PERKVILLE_REDIRECT_URI'),
+        'BASE_URL': os.getenv('PERKVILLE_BASE_URL'),
+        'PERKVILLE_TOKEN_URL' : os.getenv('PERKVILLE_TOKEN_URL'),
+        'PERKVILLE_AUTHORIZE_URL' : os.getenv('PERKVILLE_AUTHORIZE_URL'),
+        'PERKVILLE_SCOPES': os.getenv('PERKVILLE_SCOPES')
+   
+
     },
     
 }

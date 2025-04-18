@@ -1,5 +1,6 @@
 from django.urls import path, include
-from .views import UserRegistrationView, CustomTokenObtainPairView, VerifyOTPView,PasswordResetView, SendOTPView, PerkvilleAuthView, PerkvilleOAuthCallbackView, PerkvillePasswordGrantView, PerkvilleUserInfoView
+from .views import UserRegistrationView, CustomTokenObtainPairView, VerifyOTPView,PasswordResetView, SendOTPView,  perkville_callback
+# PerkvilleAuthView, PerkvilleOAuthCallbackView, PerkvillePasswordGrantView, PerkvilleUserInfoView,
 from django.conf import settings
 
 
@@ -13,10 +14,17 @@ urlpatterns = [
 
     # path('perkville/callback/', perkville_callback, name='perkville_callback'),
     # path('perkville/callback/', PerkvilleCallbackView.as_view(), name='perkville_callback'),
-    path('perkville/auth/', PerkvilleAuthView.as_view(), name='perkville-auth'),
-    path('perkville/callback/', PerkvilleOAuthCallbackView.as_view(), name='perkville-callback'),
-    path('perkville/password-auth/', PerkvillePasswordGrantView.as_view(), name='perkville-password-auth'),
-    path('perkville/user-info/', PerkvilleUserInfoView.as_view(), name='perkville-user-info'),
+    # path('perkville/auth/', PerkvilleAuthView.as_view(), name='perkville-auth'),
+    # path('perkville/callback/', PerkvilleOAuthCallbackView.as_view(), name='perkville-callback'),
+    # path('perkville/password-auth/', PerkvillePasswordGrantView.as_view(), name='perkville-password-auth'),
+    # path('perkville/user-info/', PerkvilleUserInfoView.as_view(), name='perkville-user-info'),
+    
+    # path('perkville/auth/', PerkvilleAuthView.as_view(), name='perkville-auth'),
+    # path('perkville/callback/', PerkvilleOAuthCallbackView.as_view(), name='perkville-callback'),
+    # path('perkville/user-info/', PerkvilleUserInfoView.as_view(), name='perkville-user-info'),
+    
+    path('perkville/callback/', perkville_callback, name='perkville-callback'),
+
 
 
 ]
