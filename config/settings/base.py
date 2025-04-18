@@ -73,7 +73,14 @@ MIDDLEWARE = [
     
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
+    
 ]
+
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'  # Or your preferred backend
+SESSION_COOKIE_SECURE = False  # True in production
+SESSION_COOKIE_SAMESITE = 'Lax'
+
 
 ROOT_URLCONF = 'config.urls'
 

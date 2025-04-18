@@ -1,60 +1,41 @@
 import secrets
-import requests
+import logging
 from django.conf import settings
-from requests.exceptions import RequestException
+from django.urls import reverse
+from django.contrib.sites.shortcuts import get_current_site
 
-class PerkvilleService:
+logger = logging.getLogger(__name__)
+
+class PerkvilleAPI:
+    """Service for handling Perkville API integration"""
+    
     @staticmethod
-    def get_authorization_url(request):
-        """Generate Perkville OAuth URL"""
-        config = settings.API_CONFIGS.get('PERKVILLE', {})
-        
-        # Validate required configuration
-        required_keys = [
-            'CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URI',
-            'PERKVILLE_AUTHORIZE_URL', 'PERKVILLE_TOKEN_URL', 'PERKVILLE_SCOPES'
-        ]
-        for key in required_keys:
-            if not config.get(key):
-                raise ValueError(f"Missing Perkville config: {key}")
-
-        state = secrets.token_urlsafe(32)
-        request.session['perkville_state'] = state
-        
-        params = {
-            'client_id': config['CLIENT_ID'],
-            'redirect_uri': config['REDIRECT_URI'],
-            'response_type': 'code',
-            'scope': config['PERKVILLE_SCOPES'],
-            'state': state
-        }
-        
-        return f"{config['PERKVILLE_AUTHORIZE_URL']}?{'&'.join(f'{k}={v}' for k,v in params.items())}", state
-
-    @staticmethod
-    def exchange_code_for_token(code, state, request):
-        """Exchange authorization code for token"""
-        config = settings.API_CONFIGS.get('PERKVILLE', {})
-        
-        if state != request.session.get('perkville_state'):
-            raise ValueError("Invalid state parameter")
-
+    def generate_authorization_url(request=None, user_id=None):
+        """Generate a Perkville authorization URL for a user"""
         try:
-            response = requests.post(
-                config['PERKVILLE_TOKEN_URL'],
-                data={
-                    'grant_type': 'authorization_code',
-                    'code': code,
-                    'redirect_uri': config['REDIRECT_URI'],
-                    'client_id': config['CLIENT_ID'],
-                    'client_secret': config['CLIENT_SECRET']
-                },
-                timeout=10
-            )
-            response.raise_for_status()
-            return response.json()['access_token']
-        except RequestException as e:
-            error = f"Perkville token exchange failed: {str(e)}"
-            if e.response:
-                error += f" | Status: {e.response.status_code} | Response: {e.response.text[:200]}"
-            raise Exception(error)
+            # Generate a random state parameter to prevent CSRF
+            state = secrets.token_urlsafe(16)
+            
+            # Store state in session if request is provided
+            if request and hasattr(request, 'session'):
+                request.session[f'perkville_state_{user_id}'] = state
+            
+            # Use the full redirect URI
+            redirect_uri = settings.PERKVILLE_REDIRECT_URI
+            
+            # Construct the authorization URL
+            auth_params = {
+                'client_id': settings.PERKVILLE_CLIENT_ID,
+                'redirect_uri': redirect_uri,
+                'response_type': 'code',
+                'scope': 'PUBLIC USER_CUSTOMER_INFO',  # Add more scopes as needed
+                'state': f"{state}_{user_id}" if user_id else state
+            }
+            
+            auth_url = f"{settings.PERKVILLE_AUTH_URL}?"
+            auth_url += "&".join([f"{key}={value}" for key, value in auth_params.items()])
+            
+            return auth_url
+        except Exception as e:
+            logger.error(f"Error generating Perkville authorization URL: {str(e)}")
+            return None

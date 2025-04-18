@@ -37,6 +37,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from apps.userauth.utils.perkville import get_perkville_authorization_url
+from .models import PerkvilleProfile
 
 
 
@@ -144,82 +145,82 @@ logger = logging.getLogger(__name__)
 #             return Response({'errors': e.detail}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class UserRegistrationView(generics.CreateAPIView):
-#     permission_classes = [AllowAny]
-#     serializer_class = UserRegistrationSerializer
+class UserRegistrationView(generics.CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserRegistrationSerializer
 
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
 
-#         try:
-#             serializer.is_valid(raise_exception=True)
-#             validated_data = serializer.validated_data
+        try:
+            serializer.is_valid(raise_exception=True)
+            validated_data = serializer.validated_data
 
-#             # Mindbody
-#             mindbody = MindbodyAPI()
-#             mindbody_response = mindbody.create_mindbody_client(validated_data)
-#             print("Mindbody Response:", mindbody_response)
+            # Mindbody
+            mindbody = MindbodyAPI()
+            mindbody_response = mindbody.create_mindbody_client(validated_data)
+            print("Mindbody Response:", mindbody_response)
 
-#             if not mindbody_response or 'Client' not in mindbody_response or not mindbody_response.get('Client', {}).get('Id'):
-#                 return Response(
-#                     {'error': 'Failed to create user in Mindbody', 'details': mindbody_response},
-#                     status=status.HTTP_400_BAD_REQUEST
-#                 )
+            if not mindbody_response or 'Client' not in mindbody_response or not mindbody_response.get('Client', {}).get('Id'):
+                return Response(
+                    {'error': 'Failed to create user in Mindbody', 'details': mindbody_response},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-#             logger.info(f"User created in Mindbody: {mindbody_response}")
-#             mindbody_id = mindbody_response['Client']['Id']
+            logger.info(f"User created in Mindbody: {mindbody_response}")
+            mindbody_id = mindbody_response['Client']['Id']
 
-#             # InBody
-#             inbody = InbodyAPI()
-#             inbody_response = inbody.create_inbody_user(validated_data)
-#             print("InBody Response:", inbody_response)
+            # InBody
+            inbody = InbodyAPI()
+            inbody_response = inbody.create_inbody_user(validated_data)
+            print("InBody Response:", inbody_response)
 
-#             if not inbody_response:
-#                 return Response(
-#                     {'error': 'Failed to create user in InBody', 'details': inbody_response},
-#                     status=status.HTTP_400_BAD_REQUEST
-#                 )
+            if not inbody_response:
+                return Response(
+                    {'error': 'Failed to create user in InBody', 'details': inbody_response},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-#             logger.info(f"User created in InBody: {inbody_response}")
-#             inbody_id = validated_data['phone_number']
+            logger.info(f"User created in InBody: {inbody_response}")
+            inbody_id = validated_data['phone_number']
 
-#             # Save user
-#             user = serializer.save(
-#                 mindbody_id=mindbody_id,
-#                 inbody_id=inbody_id
-#             )
+            # Save user
+            user = serializer.save(
+                mindbody_id=mindbody_id,
+                inbody_id=inbody_id
+            )
 
-#             send_otp_via_email(user.email, request=request)
+            send_otp_via_email(user.email, request=request)
 
-#             # Perkville OAuth redirect URL
-#             perkville_redirect_url = get_perkville_authorization_url()
+            # Perkville OAuth redirect URL
+            # perkville_redirect_url = get_perkville_authorization_url()
 
-#             return Response({
-#                 'message': "User registered successfully. OTP sent to your email for verification.",
-#                 'perkville_redirect_url': perkville_redirect_url,
-#                 'user': {
-#                     'id': user.id,
-#                     'email': user.email,
-#                     'first_name': user.first_name,
-#                     'last_name': user.last_name,
-#                     'City': user.City,
-#                     'State': user.State,
-#                     'Country': user.Country,
-#                     'PostalCode': user.PostalCode,
-#                     'AddressLine1': user.AddressLine1,
-#                     'ReferredBy': user.ReferredBy,
-#                     'DateOfBirth': user.DateOfBirth,
-#                     'Gender': user.Gender,
-#                     'PhoneNumber': user.phone_number,
-#                     'mindbody_id': mindbody_id,
-#                     'inbody_id': inbody_id,
-#                     'Height': user.Height,
-#                     'Weight': user.Weight,
-#                 }
-#             }, status=status.HTTP_201_CREATED)
+            return Response({
+                'message': "User registered successfully. OTP sent to your email for verification.",
+                # 'perkville_redirect_url': perkville_redirect_url,
+                'user': {
+                    'id': user.id,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'City': user.City,
+                    'State': user.State,
+                    'Country': user.Country,
+                    'PostalCode': user.PostalCode,
+                    'AddressLine1': user.AddressLine1,
+                    'ReferredBy': user.ReferredBy,
+                    'DateOfBirth': user.DateOfBirth,
+                    'Gender': user.Gender,
+                    'PhoneNumber': user.phone_number,
+                    'mindbody_id': mindbody_id,
+                    'inbody_id': inbody_id,
+                    'Height': user.Height,
+                    'Weight': user.Weight,
+                }
+            }, status=status.HTTP_201_CREATED)
 
-#         except serializers.ValidationError as e:
-#             return Response({'errors': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        except serializers.ValidationError as e:
+            return Response({'errors': e.detail}, status=status.HTTP_400_BAD_REQUEST)
 
 
 ######## REGISTER VIEW
@@ -312,110 +313,248 @@ logger = logging.getLogger(__name__)
 #         }, status=status.HTTP_201_CREATED)       
         
         
-class UserRegistrationView(generics.CreateAPIView):
+# class UserRegistrationView(generics.CreateAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = UserRegistrationSerializer
+
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+
+#         try:
+#             serializer.is_valid(raise_exception=True)
+#             validated_data = serializer.validated_data
+            
+#             mindbody = MindbodyAPI()
+#             mindbody_response = mindbody.create_mindbody_client(validated_data)
+#             logger.info("Mindbody Response: %s", mindbody_response)
+
+#             if not mindbody_response or 'Client' not in mindbody_response or not mindbody_response.get('Client', {}).get('Id'):
+#                 return Response(
+#                     {'error': 'Failed to create user in Mindbody', 'details': mindbody_response},
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
+#             mindbody_id = mindbody_response['Client']['Id']
+
+
+#             inbody = InbodyAPI()
+#             inbody_response = inbody.create_inbody_user(validated_data)
+#             logger.info("InBody Response: %s", inbody_response)
+
+#             if not inbody_response: 
+#                 return Response(
+#                     {'error': 'Failed to create user in InBody', 'details': inbody_response},
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
+#             inbody_id = validated_data['phone_number']
+
+#             user = serializer.save(
+#                 mindbody_id=mindbody_id,
+#                 inbody_id=inbody_id
+#             )
+#             send_otp_via_email(user.email, request=request)
+#             response_data = {
+#                 'message': "User registered successfully. OTP sent to your email.",
+#                 'user': {
+#                     'id': user.id,
+#                     'email': user.email,
+#                     'first_name': user.first_name,
+#                     'last_name': user.last_name,
+#                     'PhoneNumber': user.phone_number,
+#                     'mindbody_id': mindbody_id,
+#                     'inbody_id': inbody_id,
+#                 }
+#             }
+
+#             if auth_url:
+#                 response_data['perkville_redirect_url'] = auth_url
+#             else:
+#                 response_data['warning'] = "Perkville integration temporarily unavailable"
+
+#             return Response(response_data, status=status.HTTP_201_CREATED)
+
+#         except serializers.ValidationError as e:
+#             logger.error("Validation error: %s", str(e))
+#             return Response({'errors': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             logger.error("Unexpected error: %s", str(e))
+#             return Response(
+#                 {'error': 'Registration failed - please try again'}, 
+#                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+#             )
+    
+    
+    
+# class UserRegistrationView(generics.CreateAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = UserRegistrationSerializer
+
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+
+#         try:
+#             serializer.is_valid(raise_exception=True)
+#             validated_data = serializer.validated_data
+            
+#             mindbody = MindbodyAPI()
+#             mindbody_response = mindbody.create_mindbody_client(validated_data)
+#             logger.info("Mindbody Response: %s", mindbody_response)
+
+#             if not mindbody_response or 'Client' not in mindbody_response or not mindbody_response.get('Client', {}).get('Id'):
+#                 return Response(
+#                     {'error': 'Failed to create user in Mindbody', 'details': mindbody_response},
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
+#             mindbody_id = mindbody_response['Client']['Id']
+
+
+#             inbody = InbodyAPI()
+#             inbody_response = inbody.create_inbody_user(validated_data)
+#             logger.info("InBody Response: %s", inbody_response)
+
+#             if not inbody_response: 
+#                 return Response(
+#                     {'error': 'Failed to create user in InBody', 'details': inbody_response},
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
+#             inbody_id = validated_data['phone_number']
+
+#             user = serializer.save(
+#                 mindbody_id=mindbody_id,
+#                 inbody_id=inbody_id
+#             )
+            
+#             # Make sure PerkvilleProfile is imported before using it
+#             # Create a PerkvilleProfile for the user
+#             perkville_profile = PerkvilleProfile.objects.create(user=user)
+            
+#             # Generate Perkville authorization URL
+#             # Make sure PerkvilleAPI is also imported
+#             perkville_api = PerkvilleAPI()
+#             auth_url = perkville_api.generate_authorization_url(request=request, user_id=user.id)
+            
+#             send_otp_via_email(user.email, request=request)
+#             response_data = {
+#                 'message': "User registered successfully. OTP sent to your email.",
+#                 'user': {
+#                     'id': user.id,
+#                     'email': user.email,
+#                     'first_name': user.first_name,
+#                     'last_name': user.last_name,
+#                     'PhoneNumber': user.phone_number,
+#                     'mindbody_id': mindbody_id,
+#                     'inbody_id': inbody_id,
+#                 }
+#             }
+
+#             if auth_url:
+#                 response_data['perkville_redirect_url'] = auth_url
+#             else:
+#                 response_data['warning'] = "Perkville integration temporarily unavailable"
+
+#             return Response(response_data, status=status.HTTP_201_CREATED)
+
+#         except serializers.ValidationError as e:
+#             logger.error("Validation error: %s", str(e))
+#             return Response({'errors': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             logger.error("Unexpected error: %s", str(e))
+#             return Response(
+#                 {'error': 'Registration failed - please try again'}, 
+#                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+#             )       
+
+# from apps.userauth.Services.Perkville import PerkvilleAPI
+# import base64
+# class PerkvilleCallbackView(generics.GenericAPIView):
+#     permission_classes = [AllowAny]  # Public endpoint for Perkville callback
+    
+#     def get(self, request, *args, **kwargs):
+#         code = request.GET.get('code')
+#         state_with_user_id = request.GET.get('state')
+        
+#         if not code or not state_with_user_id:
+#             return Response({'error': 'Missing required parameters'}, status=status.HTTP_400_BAD_REQUEST)
+        
+#         try:
+#             # Extract user_id from state
+#             parts = state_with_user_id.split('_')
+#             if len(parts) < 2:
+#                 return Response({'error': 'Invalid state parameter'}, status=status.HTTP_400_BAD_REQUEST)
+            
+#             state = parts[0]
+#             user_id = parts[1]
+            
+#             # Verify state to prevent CSRF attacks
+#             expected_state = request.session.get(f'perkville_state_{user_id}')
+#             if not expected_state or expected_state != state:
+#                 return Response({'error': 'Invalid state parameter'}, status=status.HTTP_400_BAD_REQUEST)
+            
+#             # Clean up the session
+#             if f'perkville_state_{user_id}' in request.session:
+#                 del request.session[f'perkville_state_{user_id}']
+            
+#             # Exchange authorization code for access token
+#             token_data = {
+#                 'code': code,
+#                 'grant_type': 'authorization_code',
+#                 'redirect_uri': settings.PERKVILLE_REDIRECT_URI,
+#                 'client_id': settings.PERKVILLE_CLIENT_ID,
+#             }
+            
+#             # Create the Basic Auth header
+#             auth_string = f"{settings.PERKVILLE_CLIENT_ID}:{settings.PERKVILLE_CLIENT_SECRET}"
+#             auth_header = base64.b64encode(auth_string.encode()).decode()
+#             headers = {
+#                 'Authorization': f'Basic {auth_header}',
+#                 'Content-Type': 'application/x-www-form-urlencoded'
+#             }
+            
+#             # Make the token request
+#             response = requests.post(
+#                 settings.PERKVILLE_TOKEN_URL, 
+#                 data=token_data, 
+#                 headers=headers
+#             )
+            
+#             if response.status_code == 200:
+#                 token_info = response.json()
+#                 access_token = token_info.get('access_token')
+                
+#                 # Retrieve the user's profile
+#                 from django.contrib.auth import get_user_model
+#                 User = get_user_model()
+                
+#                 try:
+#                     user = User.objects.get(id=user_id)
+#                     profile, created = PerkvilleProfile.objects.get_or_create(user=user)
+#                     profile.access_token = access_token
+#                     profile.is_registered = True
+#                     profile.save()
+                    
+#                     # Redirect to frontend success page
+#                     redirect_url = f"{request.scheme}://{request.get_host()}/perkville-success?userId={user_id}"
+#                     return Response({'redirect_url': redirect_url}, status=status.HTTP_200_OK)
+#                 except User.DoesNotExist:
+#                     return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+#             else:
+#                 logger.error(f"Perkville token exchange error: {response.text}")
+#                 return Response(
+#                     {'error': 'Error obtaining access token', 'details': response.text}, 
+#                     status=response.status_code
+#                 )
+                
+#         except Exception as e:
+#             logger.error(f"Error in Perkville callback: {str(e)}")
+#             return Response({'error': f'Error processing callback: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+class RegistrationErrorView(APIView):
     permission_classes = [AllowAny]
-    serializer_class = UserRegistrationSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-
-        try:
-            # Validate input data
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
-
-            # Create Mindbody user
-            mindbody = MindbodyAPI()
-            mindbody_response = mindbody.create_mindbody_client(validated_data)
-            logger.info("Mindbody Response: %s", mindbody_response)
-
-            if not mindbody_response or 'Client' not in mindbody_response or not mindbody_response.get('Client', {}).get('Id'):
-                return Response(
-                    {'error': 'Failed to create user in Mindbody', 'details': mindbody_response},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            mindbody_id = mindbody_response['Client']['Id']
-
-            # Create InBody user
-            inbody = InbodyAPI()
-            inbody_response = inbody.create_inbody_user(validated_data)
-            logger.info("InBody Response: %s", inbody_response)
-
-            if not inbody_response:  # Your original check that was working
-                return Response(
-                    {'error': 'Failed to create user in InBody', 'details': inbody_response},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            inbody_id = validated_data['phone_number']
-
-            # Save local user
-            user = serializer.save(
-                mindbody_id=mindbody_id,
-                inbody_id=inbody_id
-            )
-
-            # Send OTP email
-            send_otp_via_email(user.email, request=request)
-
-            # Generate Perkville OAuth URL
-            try:
-                auth_url, _ = PerkvilleService.get_authorization_url(request)
-            except Exception as e:
-                logger.error("Perkville URL generation failed: %s", str(e))
-                auth_url = None
-
-            # Build response
-            response_data = {
-                'message': "User registered successfully. OTP sent to your email.",
-                'user': {
-                    'id': user.id,
-                    'email': user.email,
-                    'first_name': user.first_name,
-                    'last_name': user.last_name,
-                    'PhoneNumber': user.phone_number,
-                    'mindbody_id': mindbody_id,
-                    'inbody_id': inbody_id,
-                }
-            }
-
-            if auth_url:
-                response_data['perkville_redirect_url'] = auth_url
-            else:
-                response_data['warning'] = "Perkville integration temporarily unavailable"
-
-            return Response(response_data, status=status.HTTP_201_CREATED)
-
-        except serializers.ValidationError as e:
-            logger.error("Validation error: %s", str(e))
-            return Response({'errors': e.detail}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            logger.error("Unexpected error: %s", str(e))
-            return Response(
-                {'error': 'Registration failed - please try again'}, 
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-
-from apps.userauth.Services.Perkville import PerkvilleService
-@api_view(['GET'])
-def perkville_callback(request):
-    try:
-        # 1. Verify state and get token
-        access_token = PerkvilleService.exchange_code_for_token(
-            code=request.GET.get('code'),
-            state=request.GET.get('state'),
-            request=request
-        )
-        
-        # 2. Store token with user
-        request.user.perkville_access_token = access_token
-        request.user.save()
-        
-        # 3. Redirect to success page
-        return redirect('registration-success')
-        
-    except Exception as e:
-        logger.error(f"Perkville callback failed: {str(e)}")
-        return redirect('registration-error?message=' + str(e))
+    
+    def get(self, request):
+        return Response({
+            'status': 'error',
+            'message': request.GET.get('message', 'Unknown error occurred')
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 ####### LOGIN VIEW
 class CustomTokenObtainPairView(TokenObtainPairView):

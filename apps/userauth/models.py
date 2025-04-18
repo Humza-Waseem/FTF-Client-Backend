@@ -100,3 +100,26 @@ class User(AbstractUser):
     @receiver(reset_password_token_created)
     def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
         sendResetPasswordEmail(reset_password_token)
+
+
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class PerkvilleProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perkville_profile')
+    access_token = models.CharField(max_length=255, null=True, blank=True)
+    token_created_at = models.DateTimeField(auto_now_add=True, null=True)
+    is_registered = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"Perkville Profile - {self.user.username}"
+    
+class MindbodyClientProfile(models.Model):
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='mindbody_profile')
+    # mindbody_id = models.CharField(max_length=255, null=True, blank=True)
+    pass
+
+class InbodyProfile(models.Model):
+    pass
