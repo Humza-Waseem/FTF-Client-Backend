@@ -19,10 +19,9 @@ DEBUG = ENVIRONMENT == 'local'
 # Security
 # --------------------------------------------------
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
-# CSRF_TRUSTED_ORIGINS must include scheme (http:// or https://)
-raw_csrf = os.getenv('CSRF_TRUSTED_ORIGINS', '')
-CSRF_TRUSTED_ORIGINS = [u.strip() for u in raw_csrf.split(',') if u.strip().startswith(('http://', 'https://'))]
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', 'web-production-76282.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://web-production-76282.up.railway.app']
+
 
 # --------------------------------------------------
 # Applications
