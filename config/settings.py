@@ -232,3 +232,30 @@ API_CONFIGS = {
     'INBODY': {'API_KEY': os.getenv('INBODY_API_KEY'), 'ACCOUNT': os.getenv('INBODY_ACCOUNT'), 'BASE_URL': 'https://api.inbody.com'},
     'PERKVILLE': {'CLIENT_ID': os.getenv('PERKVILLE_CLIENT_ID'), 'CLIENT_SECRET': os.getenv('PERKVILLE_CLIENT_SECRET'), 'REDIRECT_URI': os.getenv('PERKVILLE_REDIRECT_URI'), 'BASE_URL': os.getenv('PERKVILLE_BASE_URL'), 'PERKVILLE_TOKEN_URL': os.getenv('PERKVILLE_TOKEN_URL'), 'PERKVILLE_AUTHORIZE_URL': os.getenv('PERKVILLE_AUTHORIZE_URL'), 'PERKVILLE_SCOPES': os.getenv('PERKVILLE_SCOPES')},
 }
+
+
+
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING' if not DEBUG else 'INFO',
+    },
+}
+
+# Railway deployment validation
+if 'RAILWAY_ENVIRONMENT' in os.environ:
+    ALLOWED_HOSTS = ['*']
+    CSRF_TRUSTED_ORIGINS = [
+        f'https://{os.environ["RAILWAY_STATIC_URL"]}',
+        'https://*.railway.app'
+    ]
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
