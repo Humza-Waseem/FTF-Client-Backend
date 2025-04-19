@@ -12,8 +12,10 @@ load_dotenv(BASE_DIR / '.env')
 # --------------------------------------------------
 # Environment
 # --------------------------------------------------
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'production')  # 'local' or 'production'
-DEBUG = ENVIRONMENT == 'local'
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'production')  # defaults to 'production' if not set
+DEBUG = ENVIRONMENT != 'production'
+
+
 
 # --------------------------------------------------
 # Security
@@ -101,8 +103,11 @@ TEMPLATES = [
 # --------------------------------------------------
 # Database
 # --------------------------------------------------
+
+import dj_database_url
+
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
 
 # --------------------------------------------------
@@ -127,7 +132,7 @@ USE_TZ = True
 # Static & Media
 # --------------------------------------------------
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else []
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
