@@ -144,19 +144,10 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
-
 # JWT Settings
 from datetime import timedelta
 SIMPLE_JWT = {
@@ -165,9 +156,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 }
-
-
-
 
 
 AUTHENTICATION_BACKENDS = [
@@ -304,21 +292,6 @@ API_CONFIGS = {
     },
     
 }
-
-# print(API_CONFIGS['NUTRITIONIX']['APP_ID'])
-# print(API_CONFIGS['NUTRITIONIX']['APP_KEY'])
-# print(API_CONFIGS['MINDBODY']['API_KEY'])
-# print(API_CONFIGS['MINDBODY']['SITE_ID'])
-# print(API_CONFIGS['MINDBODY']['BASE_URL'])
-# print(API_CONFIGS['INBODY']['API_KEY'])
-# print(API_CONFIGS['INBODY']['ACCOUNT'])
-
-
-
-
-        
-
-
 
 # Example usage:
 
